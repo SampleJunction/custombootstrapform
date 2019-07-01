@@ -124,6 +124,7 @@ class CustomBootstrapForm extends BootstrapForm{
      */
     public function radios($name, $label = null, $choices = [], $checkedValue = null, $inline = false, array $options = [])
     {
+
         $elements = '';
         $elementWrapper = '<div class="col-sm-4 col-md-4">';
         $elementWrapperClose = '</div>';
@@ -152,7 +153,7 @@ class CustomBootstrapForm extends BootstrapForm{
             return 'Invalid Type';
         }
         $field_type = $this->typeMap[$type];
-        $user_answer = (! $userAnswers->isEmpty() )?$userAnswers->first()->user_answer:false;
+        $user_answer = (($userAnswers) && (!$userAnswers->isEmpty()) )?$userAnswers->first():false;
         if( in_array($field_type, ['text', 'number' ]) ){
             return call_user_func_array([ $this, $field_type], [ $name, false, $user_answer,['required'=>'true'] ]);
         }
@@ -161,9 +162,9 @@ class CustomBootstrapForm extends BootstrapForm{
             if(!empty($user_answer)){
                 $user_answer = explode(',', $user_answer);
             }
+
             return call_user_func_array([ $this, $field_type], [ $name, null, $answers, $user_answer, false ]);
         }
-
         if( in_array($field_type, [ 'radios' ]) ){
             return call_user_func_array([ $this, $field_type], [ $name, null, $answers, $user_answer,false,['required'=>'true'] ]);
         }
